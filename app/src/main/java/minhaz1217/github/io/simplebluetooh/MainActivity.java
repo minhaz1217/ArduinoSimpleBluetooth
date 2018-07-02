@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +23,12 @@ public class MainActivity extends AppCompatActivity {
     boolean bluetoothEnabled = false;
     //public static String[] pairedDeviceArray = new String[200];
     public static ArrayList<String> pairedDeviceListArray = new ArrayList<String>();
+    public static ArrayList<String> pairedDeviceAddress = new ArrayList<String>();
     BluetoothAdapter bluetoothAdapter;
+    int pairedDeviceRequestCode = 1;
+    Socket pairedDeviceSocket;
+    Set<BluetoothDevice> pairedDevice;
+    int PORT_UUID = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,22 +91,48 @@ public class MainActivity extends AppCompatActivity {
 
             if(bluetoothAdapter.getBondedDevices().size() > 0){
                 // finding the list of paired devices and using them to generate a list of their name and address
-                Set<BluetoothDevice> pairedDevice = bluetoothAdapter.getBondedDevices();
+                pairedDevice = bluetoothAdapter.getBondedDevices();
+                pairedDeviceListArray.clear();
+                pairedDeviceAddress.clear();
                 for(BluetoothDevice device : pairedDevice ){
                     pairedDeviceListArray.add(device.getName());
+                    pairedDeviceAddress.add(device.getAddress());
+
                 }
             }
 
 
             bundle.putStringArrayList("pairedDeviceList", pairedDeviceListArray );
-
             startPairedDeviceList.putExtras(bundle);
-            startActivity(startPairedDeviceList);
+            startActivityForResult(startPairedDeviceList, pairedDeviceRequestCode);
 
         }
 
 
 
+
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == pairedDeviceRequestCode){
+            if(resultCode == RESULT_OK){
+                String str = data.getStringExtra("pairedDeviceResult");
+                //showMessage(str);
+                int selection = Integer.parseInt(str );
+                //showMessage(pairedDeviceListArray.get(selection));
+
+                for(BluetoothDevice device : pairedDevice){
+                    if(device.getAddress().equals(pairedDeviceAddress.get(selection)) && device.getName().equals(pairedDeviceListArray.get(selection)) ){
+                        showMessage("MATCH FOUND: " + device.getName());
+                        //pairedDeviceSocket = device.createRfcommSocketToServiceRecord(5);
+                        //pairedDeviceSocket.connect();
+                    }
+                }
+                //showMessage(str);
+            }
+        }
 
 
     }

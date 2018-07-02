@@ -55,8 +55,16 @@ public class PairdDevicesList extends ListActivity {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("HELLO", i + "");
-                Toast.makeText(getApplicationContext(), i + "", Toast.LENGTH_SHORT).show();
+
+                // on an item click sending the index of the item back to the main activity
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("pairedDeviceResult", i + "" );
+                setResult(RESULT_OK, resultIntent);
+                finish(); // ending this activity
+
+
+                //Log.d("HELLO", i + "");
+                //Toast.makeText(getApplicationContext(), i + "", Toast.LENGTH_SHORT).show();
 
             }
         });
