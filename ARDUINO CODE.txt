@@ -1,0 +1,40 @@
+
+
+char receievedChar;
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if(Serial.available()){
+     receievedChar = (Serial.read());
+     if(receievedChar == '1'){
+      turnOnLight();
+     }else if(receievedChar == '2'){
+      turnOffLight();
+     }else if(receievedChar == '3'){
+      turnOnFan();
+     }else if(receievedChar == '4'){
+      turnOffFan();
+     }
+   }
+};
+
+void turnOnLight(){
+  // yoru turn on light ccde here
+  Serial.println("Turn On Light");
+}
+void turnOffLight(){
+  // yoru turn off light ccde here
+  Serial.println("Turn Off Light");
+}
+void turnOnFan(){
+  // yoru turn on fan ccde here
+  Serial.println("Turn On Fan");
+}
+void turnOffFan(){
+  // yoru turn off fan ccde here
+  Serial.println("Turn Off Fan");
+}
