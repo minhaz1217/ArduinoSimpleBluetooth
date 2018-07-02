@@ -4,14 +4,18 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.bluetooth.BluetoothSocket;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +37,21 @@ public class MainActivity extends AppCompatActivity {
     Set<BluetoothDevice> pairedDevice;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     //static final UUID myUUID = UUID.randomUUID();
+
+    TextView connectionStatus, lightStatus, fanStatus;
+    String messages[] = {"Not Connected", "Light Status: OFF", "Light Status: ON", "Fan Status: OFF", "Fan Status: ON"};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w("STARTED", "HELLO");
+        //Log.w("STARTED", "HELLO");
+        connectionStatus = (TextView) findViewById(R.id.connectionStatus);
+        lightStatus = (TextView) findViewById(R.id.tv_light);
+        fanStatus = (TextView) findViewById(R.id.tv_fan);
+
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         setContentView(R.layout.activity_main);
 
     }
@@ -101,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 for(BluetoothDevice device : pairedDevice ){
                     pairedDeviceListArray.add(device.getName());
                     pairedDeviceAddress.add(device.getAddress());
-
                 }
             }
 
@@ -133,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             pairedDeviceSocket = device.createRfcommSocketToServiceRecord(myUUID);
                             pairedDeviceSocket.connect();
-                            showMessage("CONNECTING");
                             break;
                         }catch (Exception e){
                             Log.e("ERROR", e.getMessage());
@@ -142,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(pairedDeviceSocket.isConnected()){
+                    //connectionStatus.setText(messages[0].charAt(4));
+                    //connectionStatus.setText("Conencted: " + pairedDeviceSocket.getRemoteDevice().getName());
+                    //connectionStatus.setText("Conencted: " + pairedDeviceSocket.getRemoteDevice().getName());
+                    //connectionStatus.setTextColor(Color.GREEN);
                     showMessage("CONNECTED TO: " + pairedDeviceSocket.getRemoteDevice().getName());
                 }else{
                     showMessage("NOT CONNECTED");
@@ -157,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("1".getBytes()); // sending 1 to turn on light
+                //lightStatus.setText("Light Status: Light Status: OFF");
             }catch (IOException e){
                 Log.e("IO_ERROR", e.getMessage());
             }
@@ -170,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("2".getBytes()); // sending 2 to turn off light
+
             }catch (IOException e){
                 Log.e("IO_ERROR", e.getMessage());
             }
