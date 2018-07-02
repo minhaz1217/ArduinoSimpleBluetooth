@@ -81,14 +81,18 @@ public class MainActivity extends AppCompatActivity {
 
 
             Bundle bundle = new Bundle();
-           // bundle.putStringArray("pairedDeviceList", new String[]{"1a", "2a", "3a"} );
+            // add paired device list to the pairedDeviceListArray
 
-            pairedDeviceListArray.add("1c");
-            pairedDeviceListArray.add("2c");
-            pairedDeviceListArray.add("3c");
+            if(bluetoothAdapter.getBondedDevices().size() > 0){
+                // finding the list of paired devices and using them to generate a list of their name and address
+                Set<BluetoothDevice> pairedDevice = bluetoothAdapter.getBondedDevices();
+                for(BluetoothDevice device : pairedDevice ){
+                    pairedDeviceListArray.add(device.getName());
+                }
+            }
+
 
             bundle.putStringArrayList("pairedDeviceList", pairedDeviceListArray );
-            //bundle.putStringArray("pairedDeviceList", pairedDeviceListArray);
 
             startPairedDeviceList.putExtras(bundle);
             startActivity(startPairedDeviceList);
