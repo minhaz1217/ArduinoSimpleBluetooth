@@ -20,8 +20,8 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     boolean bluetoothEnabled = false;
-    public static String[] pairedDeviceArray = new String[200];
-    public static ArrayList<String> pairedDeviceListArray = new ArrayList<>();
+    //public static String[] pairedDeviceArray = new String[200];
+    public static ArrayList<String> pairedDeviceListArray = new ArrayList<String>();
     BluetoothAdapter bluetoothAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             Bundle bundle = new Bundle();
-            bundle.putStringArray("pairedDeviceList", new String[]{"1a", "2a", "3a"} );
+           // bundle.putStringArray("pairedDeviceList", new String[]{"1a", "2a", "3a"} );
+
             pairedDeviceListArray.add("1c");
             pairedDeviceListArray.add("2c");
             pairedDeviceListArray.add("3c");
-            //bundle.putStringArrayList("pairedDeviceList", pairedDeviceListArray );
+
+            bundle.putStringArrayList("pairedDeviceList", pairedDeviceListArray );
             //bundle.putStringArray("pairedDeviceList", pairedDeviceListArray);
 
             startPairedDeviceList.putExtras(bundle);

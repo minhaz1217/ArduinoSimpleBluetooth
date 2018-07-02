@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PairdDevicesList extends ListActivity {
@@ -31,10 +32,10 @@ public class PairdDevicesList extends ListActivity {
 
         Intent myIntent = getIntent();
         Bundle receiveBundle = myIntent.getExtras();
-        String[] deviceList = receiveBundle.getStringArray("pairedDeviceList");
-        //String[] myarr = receiveBundle.getStringArray("pairedDeviceList");
-        //receiveBundle.getString
-        showMessage(receiveBundle.getStringArray("pairedDeviceList")[0].toString()+" ");
+        //String[] deviceList = receiveBundle.getStringArray("pairedDeviceList");
+        ArrayList<String> receivedArrayList = receiveBundle.getStringArrayList("pairedDeviceList");
+
+        //showMessage(receiveBundle.getStringArray("pairedDeviceList")[0].toString()+" ");
 
         //String[] array = receiveBundle.getStringArray("pairedDeviceList");
         //Log.v("DEVICE LIST", receieveBundle.size() +"" );
@@ -47,7 +48,7 @@ public class PairdDevicesList extends ListActivity {
         test.add("1");
         String[] testArr = {"1B", "2B", "3B"};
         setListAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, deviceList
+                android.R.layout.simple_list_item_1, receivedArrayList
                 ));
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         getListView().setTextFilterEnabled(true);
