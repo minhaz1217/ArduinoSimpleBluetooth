@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,14 +20,20 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     boolean bluetoothEnabled = false;
-
-
+    public static String[] pairedDeviceArray = new String[200];
+    public static ArrayList<String> pairedDeviceListArray = new ArrayList<>();
+    BluetoothAdapter bluetoothAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("STARTED", "HELLO");
         super.onCreate(savedInstanceState);
+        Log.w("STARTED", "HELLO");
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         setContentView(R.layout.activity_main);
+
     }
+
 
     public void showMessage(String str){
         Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
@@ -37,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void clicked_b_connect(View view){
-        showMessage("CLICKED CONNECT");
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        //showMessage("CLICKED CONNECT");
+
         bluetoothEnabled = bluetoothAdapter.isEnabled(); // chcking if the bluetooth is e enabled.
         if(!bluetoothEnabled){
             // if the bluetooth is not enabled then show a message to enable bluetooth and enabling the bluetooth.
@@ -51,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             startActivity(enableBluetoothIntent);
+                            bluetoothEnabled = bluetoothAdapter.isEnabled();
                         }
                     }
 
@@ -68,6 +77,19 @@ public class MainActivity extends AppCompatActivity {
             alert.show();
         }else{
             // bluetooth is enabled so we'll generate the paired device list.
+            Intent startPairedDeviceList = new Intent(MainActivity.this, PairdDevicesList.class);
+
+
+            Bundle bundle = new Bundle();
+            bundle.putStringArray("pairedDeviceList", new String[]{"1a", "2a", "3a"} );
+            pairedDeviceListArray.add("1c");
+            pairedDeviceListArray.add("2c");
+            pairedDeviceListArray.add("3c");
+            //bundle.putStringArrayList("pairedDeviceList", pairedDeviceListArray );
+            //bundle.putStringArray("pairedDeviceList", pairedDeviceListArray);
+
+            startPairedDeviceList.putExtras(bundle);
+            startActivity(startPairedDeviceList);
 
         }
 
