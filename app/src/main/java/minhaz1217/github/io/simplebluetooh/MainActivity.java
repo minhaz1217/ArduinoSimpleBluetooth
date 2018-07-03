@@ -222,5 +222,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void clicked_btnHelp(View view){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("How to use?");
+        builder.setMessage( "1. At first pair the bluetooth using mobile's bluetooth setting.\n" +
+                            "2. Click 'CONNECT' and select the bluetooth you wish to connect with.\n" +
+                            "3. With successful connection the text should say 'Connected: <Name>'\n" +
+                            "4. Now press the buttons to send messages.\n\n" +
+                            "Light 'ON' to send '1'\n" +
+                            "Light 'OFF' to send '2'\n" +
+                            "Fan 'ON' to send '3' \n" +
+                            "Fan 'OFF' to send '4'\n" +
+                            "");
+
+
+
+        builder.show();
+    }
+
 
 }
