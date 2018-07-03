@@ -40,19 +40,25 @@ public class MainActivity extends AppCompatActivity {
 
     TextView connectionStatus, lightStatus, fanStatus;
     String messages[] = {"Not Connected", "Light Status: OFF", "Light Status: ON", "Fan Status: OFF", "Fan Status: ON"};
-
+    int positive = Color.parseColor("#00c853");
+    int negative = Color.parseColor("#d50000");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.w("STARTED", "HELLO");
-        connectionStatus = (TextView) findViewById(R.id.connectionStatus);
-        lightStatus = (TextView) findViewById(R.id.tv_light);
-        fanStatus = (TextView) findViewById(R.id.tv_fan);
+        setContentView(R.layout.activity_main);
 
+
+
+        //Log.w("STARTED", "HELLO");
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        setContentView(R.layout.activity_main);
+        connectionStatus = findViewById(R.id.connectionStatus);
+        lightStatus = findViewById(R.id.tv_light);
+        fanStatus = findViewById(R.id.tv_fan);
+        connectionStatus.setText(messages[0]);
+        connectionStatus.setTextColor(negative);
+
 
     }
 
@@ -134,13 +140,10 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == pairedDeviceRequestCode){
             if(resultCode == RESULT_OK){
                 String str = data.getStringExtra("pairedDeviceResult");
-                //showMessage(str);
                 int selection = Integer.parseInt(str );
-                //showMessage(pairedDeviceListArray.get(selection));
 
                 for(BluetoothDevice device : pairedDevice){
                     if(device.getAddress().equals(pairedDeviceAddress.get(selection)) && device.getName().equals(pairedDeviceListArray.get(selection)) ){
-                        //showMessage("MATCH FOUND: " + device.getName());
                         try {
                             pairedDeviceSocket = device.createRfcommSocketToServiceRecord(myUUID);
                             pairedDeviceSocket.connect();
@@ -152,61 +155,68 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(pairedDeviceSocket.isConnected()){
-                    //connectionStatus.setText(messages[0].charAt(4));
-                    //connectionStatus.setText("Conencted: " + pairedDeviceSocket.getRemoteDevice().getName());
-                    //connectionStatus.setText("Conencted: " + pairedDeviceSocket.getRemoteDevice().getName());
-                    //connectionStatus.setTextColor(Color.GREEN);
+                    connectionStatus.setText("Conencted: " + pairedDeviceSocket.getRemoteDevice().getName());
+                    connectionStatus.setTextColor(positive);
                     showMessage("CONNECTED TO: " + pairedDeviceSocket.getRemoteDevice().getName());
                 }else{
-                    showMessage("NOT CONNECTED");
+                    showMessage("Unable To Connect");
                 }
-                //showMessage(str);
             }
         }
 
 
     }
     public void clicked_b_lightOn(View view){
-        showMessage("CLICKED Light ON");
+
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("1".getBytes()); // sending 1 to turn on light
-                //lightStatus.setText("Light Status: Light Status: OFF");
+                lightStatus.setText(messages[2]);
+                lightStatus.setTextColor(positive);
             }catch (IOException e){
+                showMessage("Unable to send message. Check if bluetooth is connected.");
                 Log.e("IO_ERROR", e.getMessage());
             }
         }
+
 
 
 
     }
     public void clicked_b_lightOff(View view){
-        showMessage("CLICKED Light OFF");
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("2".getBytes()); // sending 2 to turn off light
+                lightStatus.setText(messages[1]);
+                lightStatus.setTextColor(negative);
 
             }catch (IOException e){
+                showMessage("Unable to send message. Check if bluetooth is connected.");
                 Log.e("IO_ERROR", e.getMessage());
             }
         }
     }
     public void clicked_b_fanOn(View view){
-        showMessage("CLICKED Fan ON");
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("3".getBytes()); // sending 3 to turn on fan
+                fanStatus.setText(messages[4]);
+                fanStatus.setTextColor(positive);
             }catch (IOException e){
+                showMessage("Unable to send message. Check if bluetooth is connected.");
                 Log.e("IO_ERROR", e.getMessage());
             }
         }
     }
     public void clicked_b_fanOff(View view){
-        showMessage("CLICKED Fan OFF");
         if(pairedDeviceSocket != null){ // checking if the socket is busy or not
             try{
                 pairedDeviceSocket.getOutputStream().write("4".getBytes()); // sending 4 to turn off fan
+                fanStatus.setText(messages[3]);
+                fanStatus.setTextColor(negative);
+
             }catch (IOException e){
+                showMessage("Unable to send message. Check if bluetooth is connected.");
                 Log.e("IO_ERROR", e.getMessage());
             }
         }

@@ -16,7 +16,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PairdDevicesList extends ListActivity {
-    public static ArrayList<String> deviceListArray = new ArrayList<>();
+
+
     public void showMessage(String str){
         Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
 
@@ -24,29 +25,10 @@ public class PairdDevicesList extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        deviceListArray.add("1");
-        deviceListArray.add("1");
-        deviceListArray.add("1");
-        deviceListArray.add("1");deviceListArray.add("1");
-
         Intent myIntent = getIntent();
-        Bundle receiveBundle = myIntent.getExtras();
-        //String[] deviceList = receiveBundle.getStringArray("pairedDeviceList");
+        Bundle receiveBundle = myIntent.getExtras(); // receiving the message from main activity
         ArrayList<String> receivedArrayList = receiveBundle.getStringArrayList("pairedDeviceList");
 
-        //showMessage(receiveBundle.getStringArray("pairedDeviceList")[0].toString()+" ");
-
-        //String[] array = receiveBundle.getStringArray("pairedDeviceList");
-        //Log.v("DEVICE LIST", receieveBundle.size() +"" );
-        //showMessage("SIZE: " + array[0]);
-
-        ArrayList<String> test = new ArrayList<String>();
-        test.add("1");
-        test.add("1");
-        test.add("1");
-        test.add("1");
-        String[] testArr = {"1B", "2B", "3B"};
         setListAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, receivedArrayList
                 ));
@@ -62,14 +44,7 @@ public class PairdDevicesList extends ListActivity {
                 setResult(RESULT_OK, resultIntent);
                 finish(); // ending this activity
 
-
-                //Log.d("HELLO", i + "");
-                //Toast.makeText(getApplicationContext(), i + "", Toast.LENGTH_SHORT).show();
-
             }
         });
-
-
-        //setContentView(R.layout.activity_paird_devices_list);
     }
 }
